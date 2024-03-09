@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/default}"
+>
+<th:block layout:fragment="meta">
+    <title>Shop &mdash; Free Website Template, Free HTML5 Template by gettemplates.co</title>
+    <meta name="description" content="Free HTML5 Website Template by gettemplates.co"/>
+    <meta name="keywords"
+          content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive"/>
+</th:block>
+<body>
+<div layout:fragment="content">
+    <div id="fh5co-started">
+        <div class="container">
+            <div class="row animate-box">
+                <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                    <h2>로그인</h2>
+                </div>
+            </div>
+            <div class="row animate-box">
+                <div class="col-md-8 col-md-offset-2">
+                    <form class="form-inline" name="loginForm" id="loginForm" method="post" action="/login" >
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <label for="userId" class="sr-only">ID</label>
+                                <input type="text" class="form-control" id="userId" name="userId" placeholder="ID">
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="sr-only">password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="password">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <button type="button" id="logIn" class="btn btn-warning btn-block">로그인</button>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <button type="button" id="signUp" class="btn btn-danger btn-block">회원가입</button>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="btn-group-vertical feature-center" style="display: flex; justify-content: space-evenly">
+                                <button type="button" onclick="window.location.href='/oauth2/authorization/kakao'" class="btn_social" style="background: none ; border: none; width: 100px; margin-left: -10px">
+                                    <img src="/images/kakao_icon.png" style="object-fit: cover; width: 100px;"
+                                         alt="카카오 로그인">
+                                </button>
+                                <button type="button" onclick="window.location.href='/oauth2/authorization/naver'" class="btn_social" style="background: none ; border: none; width: 100px; margin-left: -10px">
+                                    <img src="/images/naver_icon.png" style="object-fit: cover; width: 100px;"
+                                         alt="카카오 로그인">
+                                </button>
+                                <button type="button" onclick="window.location.href='/oauth2/authorization/google'" class="btn_social" style="background: none ; border: none; width: 100px; margin-left: -10px">
+                                    <img src="/images/google_icon.png" style="object-fit: cover; width: 100px;"
+                                         alt="카카오 로그인">
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        let error = [[${error}]];
+        let message = [[${message}]];
+
+        if(error && error !== 'null'){
+            alert(message);
+        }
+
+        $('#logIn').on('click', function () {
+            login();
+        });
+        $('#signUp').on('click', function () {
+            location.href = '/join';
+        });
+        function login() {
+            let userId = $('#userId').val().trim();
+            let password = $('#password').val().trim();
+
+            if (userId === '') {
+                alert('아이디를 입력해주세요');
+                return false;
+            }
+            if (password === '') {
+                alert('비밀번호를 입력해주세요');
+                return false;
+            }
+
+        $.ajax({
+            url: '/login/process',
+            type: 'POST',
+            timeout: 10000,
+            async: false,
+            data: {
+                userId: userId,
+            },
+            success: function (data) {
+                // console.log(data);
+                if (data.status === 200) {
+                    $('#loginForm').submit();
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
+        }
+
+
+    </script>
+</th:block>
+</body>
+</html>
+
